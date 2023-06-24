@@ -1,32 +1,28 @@
 import React, { Component, Fragment } from 'react';
 import moment from 'moment';
-import Event from './Event.js'
 import Modal from './Modal.js'
+import Day from './Day.js'
 
 class Calendar extends React.Component {
     constructor() {
         super();
         this.state = {
-            show: false,
+            modalVisibility: false,
             dateContext: moment(),
-            selectedDay: null
+            selectedDay: null,
+            selectedEvents: []
         };
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
     }
 
-    showModal = () => {
-        this.setState({ show: true });
+    showModal = (selectedDay, selectedEvents) => {
+        this.setState({ modalVisibility: true, selectedDay: selectedDay, selectedEvents: selectedEvents });
     }
 
     hideModal = () => {
-        this.setState({ show: false });
+        this.setState({ modalVisibility: false });
     }
-
-    // state = {
-    //     dateContext: moment(),
-    //     selectedDay: null
-    // }
 
     daysInMonth = () => {
         return this.state.dateContext.daysInMonth();
@@ -69,11 +65,13 @@ class Calendar extends React.Component {
         let daysInMonth = [];
         for (let d = 1; d <= this.daysInMonth(); d++) {
             daysInMonth.push(
-                <td key={d} onClick={this.showModal} className={`calendar-day ${(d == this.currentDay() ? "table-primary" : "")}`}>
-                    {d}    
-                    <Event></Event>
-                    <Event priority={2}></Event>
-                </td>
+                <Day
+                    dayNum={d}
+                    currentDay={d == this.currentDay()}
+                    modalVisibility={this.state.modalVisibility}
+                    showModal={this.showModal}
+                    events={[]}
+                />
             )
         }
 
@@ -109,9 +107,12 @@ class Calendar extends React.Component {
 
         return (
             <>
-                <Modal show={this.state.show} handleClose={this.hideModal}>
-                    <p>Modal</p>
-                </Modal>
+                <Modal 
+                    show={this.state.modalVisibility} 
+                    handleClose={this.hideModal} 
+                    selectedDay={this.state.selectedDay} 
+                    selectedEvents={this.state.selectedEvents}
+                />
                 <div>
                     <div className='d-flex justify-content-between'>
                         <button className="top-button m-1 p-2" onClick={addEvent}>Dynamically Add Event</button>
