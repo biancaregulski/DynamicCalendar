@@ -1,11 +1,32 @@
 import React, { Component, Fragment } from 'react';
 import moment from 'moment';
+import Event from './Event.js'
+import Modal from './Modal.js'
 
 class Calendar extends React.Component {
-    state = {
-        dateContext: moment(),
-        selectedDay: null
+    constructor() {
+        super();
+        this.state = {
+            show: false,
+            dateContext: moment(),
+            selectedDay: null
+        };
+        this.showModal = this.showModal.bind(this);
+        this.hideModal = this.hideModal.bind(this);
     }
+
+    showModal = () => {
+        this.setState({ show: true });
+    }
+
+    hideModal = () => {
+        this.setState({ show: false });
+    }
+
+    // state = {
+    //     dateContext: moment(),
+    //     selectedDay: null
+    // }
 
     daysInMonth = () => {
         return this.state.dateContext.daysInMonth();
@@ -32,7 +53,7 @@ class Calendar extends React.Component {
 
        let weekdays = weekdaysShort.map(day => {
             return (
-                <th key={day} scope="col" className="weekday">
+                <th key={day} scope="col" className="weekday text-center">
                     {day}
                 </th>
             );
@@ -48,8 +69,10 @@ class Calendar extends React.Component {
         let daysInMonth = [];
         for (let d = 1; d <= this.daysInMonth(); d++) {
             daysInMonth.push(
-                <td key={d} className={`calendar-day ${(d == this.currentDay() ? "table-primary" : "")}`}>
-                    {d}
+                <td key={d} onClick={this.showModal} className={`calendar-day ${(d == this.currentDay() ? "table-primary" : "")}`}>
+                    {d}    
+                    <Event></Event>
+                    <Event priority={2}></Event>
                 </td>
             )
         }
@@ -72,28 +95,41 @@ class Calendar extends React.Component {
             }
         });
 
-        let trElems = rows.map((d, i) => {
+        let trElems = rows.map((day, index) => {
             return ( 
-                <tr className="weekday-rows" key={i}>
-                    {d}
+                <tr className="weekday-rows" key={index}>
+                    {day}
                 </tr>
             )
         });
 
+        function addEvent() {
+            alert('You clicked me!');
+        }
+
         return (
-            <div>
-                <h3 className="text-center">{this.currentMonth()}</h3>
-                <table className="table calendar-table">
-                    <thead>
-                        <tr>
-                            {weekdays}
-                        </tr>
-                    </thead>
-                    <tbody id="calendar-body">
-                        {trElems}
-                    </tbody>
-                </table>
-            </div>
+            <>
+                <Modal show={this.state.show} handleClose={this.hideModal}>
+                    <p>Modal</p>
+                </Modal>
+                <div>
+                    <div className='d-flex justify-content-between'>
+                        <button className="top-button m-1 p-2" onClick={addEvent}>Dynamically Add Event</button>
+                        <h3 className="text-center">{this.currentMonth()}</h3>
+                        <button className="top-button m-1 p-2">TBA</button>
+                    </div>
+                    <table className="table calendar-table">
+                        <thead>
+                            <tr>
+                                {weekdays}
+                            </tr>
+                        </thead>
+                        <tbody id="calendar-body">
+                            {trElems}
+                        </tbody>
+                    </table>
+                </div>
+            </>
         );
     }
 }

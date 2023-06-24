@@ -30,6 +30,17 @@ code {
   
 }
 
+.calendar-day { border-left: 1px solid lightgrey; }
+.calendar-day:last-child { border-right: 1px solid lightgrey; }
+
 .today {
   background-color: peru important!;
+}
+
+.weekday-rows {
+  border-bottom: 1px solid lightgrey;
+}
+
+.top-button {
+  
 }

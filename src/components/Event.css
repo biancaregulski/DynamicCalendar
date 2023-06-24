@@ -1,0 +1,15 @@
+.low-priority {
+    background-color:lightskyblue;
+}
+
+.med-priority {
+    background-color:plum;
+}
+
+.high-priority {
+    background-color: springgreen;
+}
+
+.event {
+    font-size: 12px;
+}

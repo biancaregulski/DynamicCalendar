@@ -1,25 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
+import './Event.css'
 
-function Event() {
+class Event extends Component {
     state = {
         title: "Event",
         description: "Description",
         time_start: null,
         time_end: null,
-        priority: 3
+        priority: this.props.priority || 3
     }
 
     priorities = {
         1: "high",
-        2: "medium",
+        2: "med",
         3: "low"
     }
 
-    return (
-        <div className={`event-${priority}`}>
-            {title}
-        </div>
-    )
+    render() {
+        return (
+            <div className={`event p-1 ${this.priorities[this.state.priority]}-priority`}>
+                {this.state.title}
+            </div>
+        )
+    }
 }
 
 export default Event;
