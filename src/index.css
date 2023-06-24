@@ -11,3 +11,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#app-navbar{
+  background-color: cornflowerblue;
+}
+
+#calendar {
+  margin: 0 20px;
+  background-color: white;
+}
+
+#calendar-body {
+  height: 80vh;
+}
+
+.calendar-day {
+  background-color: bisque;
+  
+}
+
+.today {
+  background-color: peru important!;
+}
