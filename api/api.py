@@ -1,16 +1,24 @@
 import time
-from flask import Flask, request
-# from healthcheck import HealthCheck
+import os
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
 
 from model.date import Date
 from model.event import Event
+# from healthcheck import HealthCheck
 
+# basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] =\
+#            'sqlite:///' + os.path.join(basedir, 'database.db')
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# db = SQLAlchemy(app)
 
 # health = HealthCheck()
 
 dates = [
-    Date('24052010')
+    Date("06-29-2023")
 ]
 
 events = [

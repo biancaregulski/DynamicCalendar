@@ -39,18 +39,23 @@ class Calendar extends React.Component {
     currentDay = () => {
         return this.state.dateContext.format("D");
     }
+    
+    currentDayOfWeek = () => {
+        return this.state.dateContext.isoWeekday();
+    }
 
     currentMonth = () => {
         return this.state.dateContext.format("MMMM");
     }
 
     render() {
-        let weekdaysShort = moment.weekdaysShort();
+       let weekdaysShort = moment.weekdaysShort();
+       let weekdaysLong = moment.weekdays();
 
-       let weekdays = weekdaysShort.map(day => {
+       let weekdays = weekdaysShort.map(weekday => {
             return (
-                <th key={day} scope="col" className="weekday text-center">
-                    {day}
+                <th key={weekday} scope="col" className="weekday text-center">
+                    {weekday}
                 </th>
             );
         });
@@ -62,7 +67,7 @@ class Calendar extends React.Component {
             );
         }
 
-        let daysInMonth = [];
+        let daysInMonth = [];     
         for (let d = 1; d <= this.daysInMonth(); d++) {
             daysInMonth.push(
                 <Day
@@ -70,7 +75,6 @@ class Calendar extends React.Component {
                     currentDay={d == this.currentDay()}
                     modalVisibility={this.state.modalVisibility}
                     showModal={this.showModal}
-                    events={[]}
                 />
             )
         }
@@ -111,6 +115,7 @@ class Calendar extends React.Component {
                     show={this.state.modalVisibility} 
                     handleClose={this.hideModal} 
                     selectedDay={this.state.selectedDay} 
+                    selectedWeekday={weekdaysLong[this.currentDayOfWeek()]}
                     selectedEvents={this.state.selectedEvents}
                 />
                 <div>
