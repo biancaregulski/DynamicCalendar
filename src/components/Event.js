@@ -10,10 +10,12 @@ class Event extends Component {
     }
 
     state = {
-        title: "Event",
-        description: "Description",
-        time_start: null,
-        time_end: null,
+        title: this.props.title || "Event",
+        description: this.props.title || "Description",
+        hourStart: this.props.hourStart,
+        minuteStart: this.props.minuteStart,
+        hourEnd: this.props.hourEnd,
+        minuteEnd: this.props.minuteEnd,
         priority: this.props.priority in this.priorities ? this.props.priority : "low"
     }
 

@@ -1,26 +1,21 @@
 from marshmallow import Schema, fields
 import time
-from .date import Date
-import random
+from datetime import datetime
 from .priority import Priority
 
-
 class Event:
-    def __init__(self, date_id, name, description, time_start_str, time_end_str, priority_num = 3):
-        self.date_id = random.randint(1, 1000000) 
-        self.date_id = date_id
+    def __init__(self, name, description, time_start_str, time_end_str, priority_num = 3):
         self.name = name
         self.description = description
+        self.date = datetime.strptime(time_start_str, "%m-%d-%Y").date()
         self.time_start = time.strptime(time_start_str, "%H%M") 
         self.time_end = time.strptime(time_end_str, "%H%M")
         self.priority = Priority(priority_num).name
-        
-    # def __repr__(self):
-    #     return '<Event(name={self.description!r})>'.format(self=self)
 
 class EventSchema(Schema):
-    date_id = fields.Int()
     name = fields.Str()
     description = fields.Str()
-    time_start = fields.Date()
-    time_end = fields.Str()
+    date = fields.Date()
+    time_start = fields.Time()
+    time_end = fields.Time()
+    priority = fields.Str()

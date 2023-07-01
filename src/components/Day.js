@@ -3,8 +3,8 @@ import Event from './Event.js'
 
 const Day = ({ showModal, dayNum, currentDay }) => {
     var events = [
-        <Event title="Work" priority={"high"}></Event>,
-        <Event title="Taekwondo Practice" priority={"low"}></Event>
+        <Event title="Work" hourStart={9} minuteStart={0} hourEnd={17} minuteEnd={0} priority={"high"}></Event>,
+        <Event title="Taekwondo Practice" hourStart={18} minuteStart={0} hourEnd={19} minuteEnd={0} priority={"low"}></Event>
     ]
 
     return(

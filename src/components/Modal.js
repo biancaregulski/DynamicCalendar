@@ -11,15 +11,38 @@ const Modal = ({ show, handleClose, selectedDay, selectedWeekday, selectedEvents
              
 
     let calendarBlocks = [];
+    let calendarRows = [];
 
+    let lastTimeEnd = null;
+    let lastEvent = null;
+    let currentEvent = null;
     for (let i = 0; i < 24; i++) {
-        // TODO: if (event takes place durnig this time) {
-        //     incldue it in the div
-        // }
+        currentEvent = null;
+        if (lastTimeEnd >= i) {
+            currentEvent = lastEvent;
+        }
+        else {
+            currentEvent = selectedEvents.find(ev => {
+                // check if event's start hour matches the displayed hour
+                if (ev.props.hourStart === i) {
+                    lastTimeEnd = ev.props.hourEnd;
+                    lastEvent = ev;
+                    return ev;
+                }
+            })
+        }
 
-        calendarBlocks.push(
-            <div className="time-row"><span>{timeText(i)}</span><hr/></div>
+
+        var timeRow = (
+            <>
+                <div className="mr-5 time-column">{timeText(i)}</div>
+                <div className="event-column">
+                    <hr className="my-0"/>
+                    {currentEvent}
+                </div>
+            </>
         )
+        calendarRows.push(timeRow);
     }
 
     return (
@@ -28,8 +51,9 @@ const Modal = ({ show, handleClose, selectedDay, selectedWeekday, selectedEvents
                 <section className="p-4 modal-main">
                     <h3>{selectedDay}</h3>
                     <h6>{selectedWeekday}</h6>
-                    {calendarBlocks}
-                    {selectedEvents}
+                    <div className="modal-calendar">
+                        {calendarRows}
+                    </div>
                     <button type="button" onClick={handleClose}>
                         Close
                     </button>

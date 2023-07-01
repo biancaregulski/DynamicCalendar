@@ -26,17 +26,16 @@
     display: none;
   }
 
-  .time-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  .modal-calendar {
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-template-columns: minmax(0, max-content) minmax(50%, 1fr);
   }
 
-  .time-row > span {
-    flex-grow: 0;
+  .time-column {
     font-size: 12px;
   }
 
-  .time-row > hr {
-    flex-grow: 1;
+  .event_column {
+    
   }

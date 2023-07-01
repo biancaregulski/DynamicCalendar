@@ -38,7 +38,7 @@ def get_current_time():
 def get_events_for_day():
     args = request.args
     date_str = args.get("date")
-    date = Date(date_str)
+    # events = 
     return args
 
 
