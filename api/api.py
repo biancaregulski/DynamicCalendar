@@ -1,52 +1,40 @@
 import time
 import os
-from flask import Flask, render_template, request, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, request
+from service.event_service import EventService
+import sqlite3
 
-from model.date import Date
 from model.event import Event
 # from healthcheck import HealthCheck
 
-# basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] =\
-#            'sqlite:///' + os.path.join(basedir, 'database.db')
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# db = SQLAlchemy(app)
+# TODO: move to utils
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
+event_service = EventService(get_db_connection())
 # health = HealthCheck()
 
-dates = [
-    Date("06-29-2023")
+events = [
+    Event('Work' , '', '070320230900', '070320231700'),
+    Event('Taekwondo Practice' , '', '070320231800', '070320231900')
 ]
 
-events = [
-    Event('Work' , '', '0900', '1700'),
-    Event('Taekwondo Practice' , '', '1800', '1900')
-]
 
 @app.route('/health')
 def healthcheck():
     return { 'status': 'healthy' }
 
-@app.route('/time')
-def get_current_time():
-    return { 'time': time.time() }
-
 @app.route('/events', methods=['GET'])
-def get_events_for_day():
+def get_events() -> list[dict[str, str]]:
     args = request.args
-    date_str = args.get("date")
-    # events = 
-    return args
+    month, year = args.get("month"), args.get("year")
+    if month and year:
+        return event_service.get_all_for_month(month, year)
+    else:
+        return event_service.get_all()
 
 
-    #### commands: ####
-    # python -m flask run
-    # python -m flask shell
-    # python -m pip install -U {package-name}
-    # yarn start / npm start
-
-    # possible routes:
-    # all events for one month
