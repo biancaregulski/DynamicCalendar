@@ -1,8 +1,6 @@
 import React from 'react';
 import { 
     Container,
-    Header,
-    Content,
     Nav,
     Navbar
 } from "react-bootstrap";
@@ -17,7 +15,7 @@ function AppNavbar() {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav>
-                        <Nav.Link href="/">Page</Nav.Link>
+                        <Nav.Link href="https://github.com/biancaregulski/DynamicCalendar">Github</Nav.Link>
                         <Nav.Link href="/">Page2</Nav.Link>
                         <Nav.Link href="/">Page3</Nav.Link>
                     </Nav>

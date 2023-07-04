@@ -18,12 +18,12 @@ const Modal = ({ show, handleClose, selectedDay, selectedWeekday, selectedEvents
     let currentEvent = null;
     for (let i = 0; i < 24; i++) {
         currentEvent = null;
-        if (lastTimeEnd >= i) {
+        if (lastTimeEnd > i) {
             currentEvent = lastEvent;
         }
         else {
             currentEvent = selectedEvents.find(ev => {
-                // check if event's start hour matches the displayed hour
+                // checks if event's start hour matches the displayed hour
                 if (ev.props.hourStart === i) {
                     lastTimeEnd = ev.props.hourEnd;
                     lastEvent = ev;

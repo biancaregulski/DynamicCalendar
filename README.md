@@ -7,10 +7,6 @@ yarn start / npm start
 
 *All Python commands are executed in the /api directory*
 
-### To enable virtual environment
-python env venv {virtual-environment-name}
-- e.g. .dynamic-calendar-venv
-
 ### To install a python package
 python -m pip install -U {package-name}
 

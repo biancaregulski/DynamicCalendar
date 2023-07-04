@@ -1,7 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
 import moment from 'moment';
 import Modal from './Modal.js'
 import Day from './Day.js'
+import Event from './Event.js'
+
 
 class Calendar extends React.Component {
     constructor() {
@@ -10,13 +12,105 @@ class Calendar extends React.Component {
             modalVisibility: false,
             dateContext: moment(),
             selectedDay: null,
-            selectedEvents: []
+            selectedEvents: [],
+            calendarDays: []
         };
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
     }
 
+    setCalendarDays(daysArray = []) {
+        let blanks = [];
+        for (let i = 0; i < this.firstDayOfMonth(); i++) {
+            blanks.push(
+                <td className="calendar-day table-secondary">{""}</td>
+            );
+        }
+
+        if (daysArray.length === 0) {
+            for (let d = 1; d <= this.daysInMonth(); d++) {
+                daysArray.push(
+                    <Day
+                        key={d}
+                        dayNum={d}
+                        currentDay={d === this.currentDay()}
+                        modalVisibility={this.state.modalVisibility}
+                        showModal={this.showModal}
+                        events={[]}
+                    />
+                )
+            }
+        }
+
+        let totalSlots = [...blanks, ...daysArray];
+        let rows = [];
+        let cells = [];
+
+
+        totalSlots.forEach((row, i) => {
+            if (i % 7 !== 0) {
+                cells.push(row);
+            }
+            else {
+                rows.push(cells);
+                cells = [];
+                cells.push(row);
+            }
+            if (i === totalSlots.length - 1) {
+                rows.push(cells);
+            }
+        });
+        return rows.map((day, index) => {
+            return ( 
+                <tr className="weekday-rows" key={index}>
+                    {day}
+                </tr>
+            )
+        });
+    }
+
+    componentDidMount() {
+        let daysArray = []
+        fetch(`/events?month=${this.currentMonthInt()}&year=${this.currentYear()}`).then((res) =>
+            res.json().then((data) => {
+                for (let d = 1; d <= this.daysInMonth(); d++) {
+                    // TODO: catch all parsing errors 
+                    let eventsArray = data.filter(ev => parseInt(ev.day_start) === d).map(ev => {
+                        return (
+                            <Event
+                                k={`${d}_${ev.hourStart}_${ev.minuteStart})`}
+                                title={ev.title}
+                                notes={ev.notes}
+                                priority={ev.precedence}
+                                hourStart={parseInt(ev.hour_start)}
+                                minuteStart={parseInt(ev.minute_start)}
+                                hourEnd={parseInt(ev.hour_end)}
+                                minuteEnd={parseInt(ev.minute_end)}>
+                            </Event>
+                        )
+                    })
+                    daysArray.push(
+                        <Day
+                            key={d}
+                            dayNum={d}
+                            currentDay={d === this.currentDay()}
+                            modalVisibility={this.state.modalVisibility}
+                            showModal={this.showModal}
+                            events={eventsArray}
+                        />
+                    )
+                }
+                
+                this.setState({
+                    calendarDays: this.setCalendarDays(daysArray)
+                })   
+            })
+        );
+    }
+
     showModal = (selectedDay, selectedEvents) => {
+        
+        console.log(selectedEvents);
         this.setState({ modalVisibility: true, selectedDay: selectedDay, selectedEvents: selectedEvents });
     }
 
@@ -44,8 +138,16 @@ class Calendar extends React.Component {
         return this.state.dateContext.isoWeekday();
     }
 
-    currentMonth = () => {
+    currentMonthStr = () => {
         return this.state.dateContext.format("MMMM");
+    }
+
+    currentMonthInt = () => {
+        return this.state.dateContext.format('M');
+    }
+
+    currentYear = () => {
+        return this.state.dateContext.format('Y');
     }
 
     render() {
@@ -59,55 +161,12 @@ class Calendar extends React.Component {
                 </th>
             );
         });
-    
-        let blanks = [];
-        for (let i = 0; i < this.firstDayOfMonth(); i++) {
-            blanks.push(
-                <td className="calendar-day table-secondary">{""}</td>
-            );
-        }
-
-        let daysInMonth = [];     
-        for (let d = 1; d <= this.daysInMonth(); d++) {
-            daysInMonth.push(
-                <Day
-                    dayNum={d}
-                    currentDay={d == this.currentDay()}
-                    modalVisibility={this.state.modalVisibility}
-                    showModal={this.showModal}
-                />
-            )
-        }
-
-        var totalSlots = [...blanks, ...daysInMonth];
-        let rows = [];
-        let cells = [];
-
-        totalSlots.forEach((row, i) => {
-            if (i % 7 !== 0) {
-                cells.push(row);
-            }
-            else {
-                rows.push(cells);
-                cells = [];
-                cells.push(row);
-            }
-            if (i === totalSlots.length - 1) {
-                rows.push(cells);
-            }
-        });
-
-        let trElems = rows.map((day, index) => {
-            return ( 
-                <tr className="weekday-rows" key={index}>
-                    {day}
-                </tr>
-            )
-        });
 
         function addEvent() {
-            alert('You clicked me!');
+            alert("TBA");
         }
+
+        this.setCalendarDays();
 
         return (
             <>
@@ -121,7 +180,7 @@ class Calendar extends React.Component {
                 <div>
                     <div className='d-flex justify-content-between'>
                         <button className="top-button m-1 p-2" onClick={addEvent}>Dynamically Add Event</button>
-                        <h3 className="text-center">{this.currentMonth()}</h3>
+                        <h3 className="text-center">{this.currentMonthStr()}</h3>
                         <button className="top-button m-1 p-2">TBA</button>
                     </div>
                     <table className="table calendar-table">
@@ -131,7 +190,7 @@ class Calendar extends React.Component {
                             </tr>
                         </thead>
                         <tbody id="calendar-body">
-                            {trElems}
+                            {this.state.calendarDays}
                         </tbody>
                     </table>
                 </div>
