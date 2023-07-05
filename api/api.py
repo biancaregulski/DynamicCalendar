@@ -32,4 +32,14 @@ def get_events() -> list[dict[str, str]]:
     else:
         return get_all_events()
 
+# https://auth0.com/blog/developing-restful-apis-with-python-and-flask/#Securing-Python-APIs-with-Auth0
+@app.route('/events', methods=['POST'])
+def add_event():
+    # move this to sql helper
+    # use sqlalchemy to link schema with sqlite3
+    income = EventSchema().load(request.get_json())
+    # add event to db
+    return "", 204
+
+
 
