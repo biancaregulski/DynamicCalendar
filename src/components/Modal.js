@@ -23,7 +23,7 @@ const Modal = ({ show, handleClose, selectedDay, selectedWeekday, selectedEvents
         }
         else {
             currentEvent = selectedEvents.find(ev => {
-                // checks if event's start hour matches the displayed hour
+                // check if event's start hour matches the displayed hour
                 if (ev.props.hourStart === i) {
                     lastTimeEnd = ev.props.hourEnd;
                     lastEvent = ev;
@@ -51,10 +51,12 @@ const Modal = ({ show, handleClose, selectedDay, selectedWeekday, selectedEvents
                 <section className="p-4 modal-main">
                     <h3>{selectedDay}</h3>
                     <h6>{selectedWeekday}</h6>
-                    <div className="modal-calendar">
-                        {calendarRows}
+                    <div className="modal-scroll-box">
+                        <div className="modal-calendar">
+                            {calendarRows}
+                        </div>
                     </div>
-                    <button type="button" onClick={handleClose}>
+                    <button className="modal-button" type="button" onClick={handleClose}>
                         Close
                     </button>
                 </section>

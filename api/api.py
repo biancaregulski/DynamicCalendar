@@ -1,21 +1,32 @@
 import time
 import os
 from flask import Flask, request
-from helper.sql_helper import get_all_events, get_all_events_for_month
+from sql_helper import get_all_events, get_all_events_for_month
 import sqlite3
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
+from event import db
 
-from model.event import Event
 # from healthcheck import HealthCheck
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] =\
+        'sqlite:///' + os.path.join(basedir, 'database.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 # health = HealthCheck()
 
-events = [
-    Event('Work' , '', '070320230900', '070320231700'),
-    Event('Taekwondo Practice' , '', '070320231800', '070320231900')
-]
+# events = [
+#     Event('Work' , '', '070320230900', '070320231700'),
+#     Event('Taekwondo Practice' , '', '070320231800', '070320231900')
+# ]
 
+db.init_app(app) #Add this line Before migrate line
+db.app = app
+# db.create_all()
 
 @app.route('/health')
 def healthcheck():
@@ -37,7 +48,7 @@ def get_events() -> list[dict[str, str]]:
 def add_event():
     # move this to sql helper
     # use sqlalchemy to link schema with sqlite3
-    income = EventSchema().load(request.get_json())
+    event = EventSchema().load(request.get_json())
     # add event to db
     return "", 204
 

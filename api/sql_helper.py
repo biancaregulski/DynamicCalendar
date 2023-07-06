@@ -1,4 +1,4 @@
-from model.event import Event
+from event import Event
 from typing import List
 from datetime import datetime
 import sqlite3
