@@ -9,7 +9,7 @@ db = SQLAlchemy()
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(30), nullable=False)
-    description = db.Column(db.String(100), default=None)
+    notes = db.Column(db.String(100), default=None)
     precedence = db.Column(db.String(10), default="low")
     time_start = db.Column(db.DateTime, nullable=False)
     time_end = db.Column(db.DateTime, nullable=False)
@@ -22,10 +22,3 @@ class Event(db.Model):
         self.time_end = datetime.strptime(time_end_str, "%m%d%Y%H%M")
 
 "070520232000"
-
-# class EventSchema(Schema):
-#     name = fields.Str()
-#     notes = fields.Str()
-#     time_start = fields.DateTime()
-#     time_end = fields.DateTime()
-#     precedence = fields.Str()
