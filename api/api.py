@@ -28,8 +28,8 @@ def get_events() -> list[dict[str, str]]:
     args = request.args
     # TODO: error checking, check for valid months and years
     # single digit months must be in format 0X
-    month, year = int(args.get("month")), int(args.get("year"))
-    if month and year:
+    if args.keys() >= {"month", "year"}:
+        month, year = int(args.get("month")), int(args.get("year"))
         # return events from selected month and year
         last_day_of_month = calendar.monthrange(year, month)[1]
         events = (

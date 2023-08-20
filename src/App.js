@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { Fragment, useEffect } from 'react';
-import Calendar from './components/Calendar';
+import CalendarComponent from './components/CalendarComponent';
 import AppNavbar from './components/AppNavbar';
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
     <Fragment>
       <AppNavbar/>
       <main className="mx-5 px-5">
-        <Calendar/>
+        <CalendarComponent/>
       </main>
     </Fragment>
   );

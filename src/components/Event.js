@@ -10,7 +10,7 @@ class Event extends Component {
 
     state = {
         title: this.props.title || "Event",
-        description: this.props.title || "Description",
+        notes: this.props.notes || "Notes",
         // dayStart: this.props.dayStart,
         hourStart: this.props.hourStart,
         minuteStart: this.props.minuteStart,

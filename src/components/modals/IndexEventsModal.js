@@ -1,14 +1,13 @@
 import "./Modal.css"
+import { Link } from 'react-router-dom';
 
-const Modal = ({ show, handleClose, selectedDay, selectedWeekday, selectedEvents }) => {
-    const visibilityClass = show ? "display-block" : "display-none";
+const IndexEventsModal = ({ selectedDay, selectedWeekday, selectedEvents }) => {
 
     function timeText(hour) {
         let ampm = hour < 12 ? "am" : "pm";
         let timeNum = (hour % 12 == 0) ? 12 : hour % 12;
         return timeNum + ampm
     }
-             
 
     let calendarBlocks = [];
     let calendarRows = [];
@@ -47,16 +46,23 @@ const Modal = ({ show, handleClose, selectedDay, selectedWeekday, selectedEvents
 
     return (
         <>
-            <div className={`modal ${visibilityClass}`}>
+            <div className={`modal display-block`}>
                 <section className="p-4 modal-main">
-                    <h3>{selectedDay}</h3>
-                    <h6>{selectedWeekday}</h6>
+                    <div className='d-flex justify-content-between'>
+                        <div>
+                            <h3>{selectedDay}</h3>
+                            <h6>{selectedWeekday}</h6>
+                        </div>
+                        <div>
+                            <button className="top-button m-1 p-1">Add Event</button>
+                        </div>
+                    </div>
                     <div className="modal-scroll-box">
                         <div className="modal-calendar">
                             {calendarRows}
                         </div>
                     </div>
-                    <button className="modal-button" type="button" onClick={handleClose}>
+                    <button className="modal-button" type="button" >
                         Close
                     </button>
                 </section>
@@ -65,4 +71,4 @@ const Modal = ({ show, handleClose, selectedDay, selectedWeekday, selectedEvents
     );
 }
 
-export default Modal;
+export default IndexEventsModal;

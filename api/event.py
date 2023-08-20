@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields
 import time
 from datetime import datetime
+from dateutil import parser
 from precedence import Precedence
 from flask_sqlalchemy import SQLAlchemy
 
@@ -18,7 +19,5 @@ class Event(db.Model):
         self.title = title
         self.notes = notes
         self.precedence = Precedence(precedence_num).name
-        self.time_start = datetime.strptime(time_start_str, "%m%d%Y%H%M") 
-        self.time_end = datetime.strptime(time_end_str, "%m%d%Y%H%M")
-
-"070520232000"
+        self.time_start = parser.parse(time_start_str, ignoretz=True)
+        self.time_end = parser.parse(time_end_str, ignoretz=True)

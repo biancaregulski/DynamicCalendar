@@ -1,17 +1,17 @@
 import React from 'react';
 import moment from 'moment';
-import Modal from './Modal.js'
 import Day from './Day.js'
 import Event from './Event.js'
-
+import { Link } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
 
 class Calendar extends React.Component {
     constructor() {
         super();
         this.state = {
-            modalVisibility: false,
+            selectedDay: 1,
+            modalOpen: null,
             dateContext: moment(),
-            selectedDay: null,
             selectedEvents: [],
             calendarDays: []
         };
@@ -32,10 +32,10 @@ class Calendar extends React.Component {
                 daysArray.push(
                     <Day
                         key={d}
+                        location={this.props.location}
                         dayNum={d}
+                        selectedWeekday={{}}
                         currentDay={d === this.currentDay()}
-                        modalVisibility={this.state.modalVisibility}
-                        showModal={this.showModal}
                         events={[]}
                     />
                 )
@@ -69,6 +69,11 @@ class Calendar extends React.Component {
         });
     }
 
+    dateAsString(date) {
+        date.format('MMDDYYYYhhmm');
+    }
+
+
     componentDidMount() {
         let daysArray = []
         fetch(`/events?month=${this.currentMonthInt()}&year=${this.currentYear()}`).then((res) =>
@@ -94,7 +99,6 @@ class Calendar extends React.Component {
                             key={d}
                             dayNum={d}
                             currentDay={d === this.currentDay()}
-                            modalVisibility={this.state.modalVisibility}
                             showModal={this.showModal}
                             events={eventsArray}
                         />
@@ -108,14 +112,16 @@ class Calendar extends React.Component {
         );
     }
 
-    showModal = (selectedDay, selectedEvents) => {
-        
-        console.log(selectedEvents);
-        this.setState({ modalVisibility: true, selectedDay: selectedDay, selectedEvents: selectedEvents });
+    // TODO: different params for different modals?
+    showModal = (modalType, selectedDay, selectedEvents) => {
+        console.log('showmodal - selectedDay')
+        console.log(selectedDay)
+
+        this.setState({ modalOpen: modalType, selectedDay: selectedDay, selectedEvents: selectedEvents });
     }
 
     hideModal = () => {
-        this.setState({ modalVisibility: false });
+        this.setState({ modalOpen: null });
     }
 
     daysInMonth = () => {
@@ -143,11 +149,11 @@ class Calendar extends React.Component {
     }
 
     currentMonthInt = () => {
-        return this.state.dateContext.format('M');
+        return parseInt(this.state.dateContext.format('M'));
     }
 
     currentYear = () => {
-        return this.state.dateContext.format('Y');
+        return parseInt(this.state.dateContext.format('Y'));
     }
 
     render() {
@@ -162,24 +168,54 @@ class Calendar extends React.Component {
             );
         });
 
-        function addEvent() {
-            alert("TBA");
-        }
-
         this.setCalendarDays();
 
         return (
             <>
-                <Modal 
-                    show={this.state.modalVisibility} 
+                {/* <IndexEventsModal
+                    show={this.state.modalOpen === 'index_events'}
+                    showModal={this.showModal}
                     handleClose={this.hideModal} 
                     selectedDay={this.state.selectedDay} 
                     selectedWeekday={weekdaysLong[this.currentDayOfWeek()]}
                     selectedEvents={this.state.selectedEvents}
                 />
+                <AddEventModal
+                    show={this.state.modalOpen === 'add_event'}
+                    addEvent={this.addEvent}
+                    handleClose={this.hideModal}
+                    selectedDay={this.state.selectedDay}
+                    defaultStartTime={this.selectedStartTime()}
+                    defaultEndTime={this.selectedEndTime()}
+                /> */}
+                <Outlet/>
                 <div>
                     <div className='d-flex justify-content-between'>
-                        <button className="top-button m-1 p-2" onClick={addEvent}>Dynamically Add Event</button>
+                        <Link
+                            className="button top-button m-1 p-2"
+                            to={`/add/${this.state.selectedDay}`}
+                            state={{ 
+                                previousLocation: this.props.location,
+                                show: this.state.modalOpen === 'add_event',
+                                selectedDay: this.state.selectedDay,
+                                startAttributes: { 
+                                    year: this.currentYear(),
+                                    month: this.currentMonthInt(),
+                                    day: this.state.selectedDay,
+                                    hour: 14,
+                                    minute: 0
+                                },
+                                endAttributes: { 
+                                    year: this.currentYear(),
+                                    month: this.currentMonthInt(),
+                                    day: this.state.selectedDay,
+                                    hour: 15,
+                                    minute: 0
+                                },
+                             }}
+                            >
+                            Open Modal
+                        </Link>
                         <h3 className="text-center">{this.currentMonthStr()}</h3>
                         <button className="top-button m-1 p-2">TBA</button>
                     </div>
