@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AddEventModal from './components/modals/AddEventModal';
+import IndexEventsModal from './components/modals/IndexEventsModal';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,7 +13,8 @@ root.render(
     <BrowserRouter>
       <App />
       <Routes>
-        <Route path="/add/:id" element={<AddEventModal />} />
+        <Route path="/index/d/:day/m/:month/y/:year" element={<IndexEventsModal />} />
+        <Route path="/add/d/:day/m/:month/y/:year" element={<AddEventModal />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

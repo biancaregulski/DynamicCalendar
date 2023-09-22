@@ -36,6 +36,7 @@ const EventForm = (props) => {
         })
     }
 
+    console.log(props)
     return(
         <div className="px-5">
             <form onSubmit={handleSubmit}>
@@ -113,7 +114,9 @@ const EventForm = (props) => {
                         </div>
                     </div>
                 </div>
-                <input type="submit" value="Submit" />
+                 <div className="text-center">
+                    <input type="submit" value="Submit" />
+                </div>
             </form>
         </div>
     );

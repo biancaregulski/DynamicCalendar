@@ -34,8 +34,10 @@ class Calendar extends React.Component {
                         key={d}
                         location={this.props.location}
                         dayNum={d}
+                        monthNum={this.currentMonthInt()}
+                        yearNum={this.currentYear()}
                         selectedWeekday={{}}
-                        currentDay={d === this.currentDay()}
+                        isCurrentDay={d === this.currentDay()}
                         events={[]}
                     />
                 )
@@ -75,6 +77,7 @@ class Calendar extends React.Component {
 
 
     componentDidMount() {
+        let weekdaysLong = moment.weekdays();
         let daysArray = []
         fetch(`/events?month=${this.currentMonthInt()}&year=${this.currentYear()}`).then((res) =>
             res.json().then((data) => {
@@ -98,7 +101,10 @@ class Calendar extends React.Component {
                         <Day
                             key={d}
                             dayNum={d}
-                            currentDay={d === this.currentDay()}
+                            monthNum={this.currentMonthInt()}
+                            yearNum={this.currentYear()}
+                            isCurrentDay={d === this.currentDay()}
+                            weekday={weekdaysLong[this.currentDayOfWeek()]}
                             showModal={this.showModal}
                             events={eventsArray}
                         />
@@ -158,7 +164,6 @@ class Calendar extends React.Component {
 
     render() {
        let weekdaysShort = moment.weekdaysShort();
-       let weekdaysLong = moment.weekdays();
 
        let weekdays = weekdaysShort.map(weekday => {
             return (
@@ -193,7 +198,7 @@ class Calendar extends React.Component {
                     <div className='d-flex justify-content-between'>
                         <Link
                             className="button top-button m-1 p-2"
-                            to={`/add/${this.state.selectedDay}`}
+                            to={`/add/d/${this.state.selectedDay}/m/${this.currentMonthInt()}/y/${this.currentYear()}`}
                             state={{ 
                                 previousLocation: this.props.location,
                                 show: this.state.modalOpen === 'add_event',

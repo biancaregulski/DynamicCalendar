@@ -2,6 +2,7 @@ import "./Modal.css"
 import moment from 'moment';
 import EventForm from "../EventForm.js"
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 const AddEventModal = () => {
     const navigate = useNavigate();
@@ -14,9 +15,13 @@ const AddEventModal = () => {
     
     const {
         selectedDay = 1,
-        startAttributes = {},
-        endAttributes = {}
+        startHour = 12,
+        startMinute = 0,
+        endHour = 13,
+        endMinute = 0
     } = location.state || {}
+
+    const { day, month, year } = useParams();
     
     function addEvent(eventData) {
         // console.log(eventData);
@@ -50,28 +55,27 @@ const AddEventModal = () => {
 
     
     function selectedStartTime() {
-        console.log(startAttributes)
         return moment({ 
-            year: startAttributes['year'],
-            month: startAttributes['month'],
-            day: startAttributes['day'],
-            hour: startAttributes['hour'],
-            minute: startAttributes['minute'],
+            year: year,
+            month: month - 1,
+            day: day,
+            hour: startHour,
+            minute: startMinute,
         });
     }
     
     function selectedEndTime() {
         return moment({ 
-            year: endAttributes['year'],
-            month: endAttributes['month'],
-            day: endAttributes['day'],
-            hour: endAttributes['hour'],
-            minute: endAttributes['minute'],
+            year: year,
+            month: month - 1,
+            day: day,
+            hour: endHour,
+            minute: endMinute
         });
     }
 
     return (
-        <div className={`modal display-block`}>
+        <div className="modal display-block">
             <div
                 className="modal display-block"
                 onClick={e => e.stopPropagation()}
@@ -96,9 +100,6 @@ const AddEventModal = () => {
                         defaultStartTime={selectedStartTime()}
                         defaultEndTime={selectedEndTime()}
                     />
-                    {/* <span  className="modal-button" type="button" onClick={handleClose}>
-                        Close
-                    </span> */}
                 </section>
             </div>
         </div>

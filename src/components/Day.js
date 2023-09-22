@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-const Day = ({ location, dayNum, weekday, currentDay, events }) => {
+const Day = ({ location, dayNum, monthNum, yearNum, weekday, isCurrentDay, events }) => {
     const navigate = useNavigate();
 
     //  var events = [
@@ -13,13 +13,11 @@ const Day = ({ location, dayNum, weekday, currentDay, events }) => {
     return(
                 <td 
                     key={dayNum} 
-                    className={`calendar-day ${(currentDay ? "table-primary" : "")}`} 
+                    className={`calendar-day ${(isCurrentDay ? "table-primary" : "")}`} 
                     onClick={() => navigate(
-                        `/add/${dayNum}`, 
+                        `/index/d/${dayNum}/m/${monthNum}/y/${yearNum}`,
                         { state: { 
                             previousLocation: location,
-                            show: true,
-                            selectedDay: dayNum,
                             selectedWeekday: weekday,
                             selectedEvents: events
                         }}
